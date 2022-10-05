@@ -2,4 +2,4 @@ from flask import Flask
 
 app = Flask(__name__)
 
-from app import routes, mongodb
+from app import routes, mongodb, models, dtos
