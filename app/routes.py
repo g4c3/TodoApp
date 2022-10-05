@@ -11,7 +11,6 @@ def index():
 def createTodoList():
     json_request = json.loads(request.data)
     dto_todo_list = dtos.TodoList(**json_request)
-    print(dto_todo_list.creation_date)
     db_model = models.TodoList(
         name = dto_todo_list.name,
         creation_date = dto_todo_list.creation_date,
@@ -44,6 +43,25 @@ def getTodoList():
     
     # alternative: use MongoClient
     collection = mongodb.get_db_todo().todo_list
-    res = collection.find_one({"_id": objInstance})
+    result = collection.find_one({"_id": objInstance})
     
-    return models.TodoList.parse_json(res)
+    return models.TodoList.parse_json(result)
+  
+@app.route('/updateTodoList', methods = ['PUT'])
+def updateTodoList():
+    json_request = json.loads(request.data)
+    objInstance = ObjectId(json_request['_id'])
+    
+    models.TodoList.objects.raw({
+      "_id" : objInstance
+    }).update(
+      {'$set': {
+        "name": json_request['name'],
+        "todos": json_request['todos']       
+      }}
+    )
+    
+    collection = mongodb.get_db_todo().todo_list
+    result = collection.find_one({"_id": objInstance})
+    
+    return models.TodoList.parse_json(result)

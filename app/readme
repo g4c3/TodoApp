@@ -1,0 +1,19 @@
+MongoDB: 
+    docker run --name local-mongo -d mongo:latest 
+    
+commands:
+    pip3 install -U virtualenv
+    virtualenv venv
+    linux:
+        source venv/bin/activate
+    windows:
+        venv\Scripts\activate 
+
+run:
+    pip install flask
+    pip install pymongo 
+    pip install pymodm
+    pip install python-bsonjs
+
+    flask run    
+
