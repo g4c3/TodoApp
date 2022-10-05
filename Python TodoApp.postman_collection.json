@@ -1,0 +1,140 @@
+{
+	"info": {
+		"_postman_id": "0d105e30-134a-475e-8d5a-c0945fc8a29f",
+		"name": "Python TodoApp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://127.0.0.1:5000/createTodoList",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{    \r\n    \"name\": \"new list\",\r\n    \"creation_date\": \"\",\r\n    \"todos\": []\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/createTodoList",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"createTodoList"
+					],
+					"query": [
+						{
+							"key": "todoList",
+							"value": "todoList",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/updateTodoList",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"_id\" : \"633d2f84a5008b6be89808ac\",  \r\n  \"name\": \"new list12\",\r\n  \"todos\": []\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/updateTodoList",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"updateTodoList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/getTodoList",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/getAllTodoLists",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"getAllTodoLists"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "633d2f84a5008b6be89808ac",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/getTodoList",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"633d2f84a5008b6be89808ac\"\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/getTodoList",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"getTodoList"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "633d2f84a5008b6be89808ac",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
