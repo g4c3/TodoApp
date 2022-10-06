@@ -1,5 +1,5 @@
 from asyncio.windows_events import NULL
-from app import app, dtos, models, mongodb
+from app import app, dtos, models
 from flask import request, json
 from bson import ObjectId
 
@@ -25,27 +25,23 @@ def createTodoList():
 def getTodoLists():
     db_model = []
     for todoList in models.TodoList.objects.all():
-      db_model.append(models.TodoList.parse_json(todoList))
+      modelDto = dtos.listModelToDto(todoList)
+      db_model.append(json.dumps(modelDto.__dict__))
+      
     return db_model
   
 # ?not working route with params
-# @app.route('/getTodoList/<id>', methods = ['POST','GET'])
+# @app.route('/getTodoList/<uuid>', methods = ['POST','GET'])
 @app.route('/getTodoList', methods = ['GET'])
 def getTodoList():
-    id = json.loads(request.data)['id']
+    json_request = json.loads(request.data)
+    id = json_request['id']
     objInstance = ObjectId(id)   
-    
-    # todoList_json = ''
-    # problem with finding an object with id through the pymodm framework
-    # for todoList in models.TodoList.objects.raw({'legacy_id': objInstance}):
-    # for todoList in models.TodoList.objects.values().get({'_id': id}):
-    #   todoList_json = models.TodoList.parse_json(todoList)
-    
-    # alternative: use MongoClient
-    collection = mongodb.get_db_todo().todo_list
-    result = collection.find_one({"_id": objInstance})
-    
-    return models.TodoList.parse_json(result)
+    todoListDto: dtos.TodoList    
+    for todoList in models.TodoList.objects.raw({'_id': objInstance}):
+      todoListDto = dtos.listModelToDto(todoList)
+      
+    return json.dumps(todoListDto.__dict__)
   
 @app.route('/updateTodoList', methods = ['PUT'])
 def updateTodoList():
@@ -61,7 +57,8 @@ def updateTodoList():
       }}
     )
     
-    collection = mongodb.get_db_todo().todo_list
-    result = collection.find_one({"_id": objInstance})
+    todoListDto: dtos.TodoList    
+    for todoList in models.TodoList.objects.raw({'_id': objInstance}):
+      todoListDto = dtos.listModelToDto(todoList)
     
-    return models.TodoList.parse_json(result)
+    return json.dumps(todoListDto.__dict__)
