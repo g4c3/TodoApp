@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from app import app, dtos, models
 from flask import request, json
 from bson import ObjectId
@@ -11,37 +10,49 @@ def index():
 def createTodoList():
     json_request = json.loads(request.data)
     dto_todo_list = dtos.TodoList(**json_request)
-    db_model = models.TodoList(
+    
+    db_todos = []
+    for todo in dto_todo_list.todos:
+      todo_model = models.Todo(
+        text = todo.text,
+        due_date = todo.due_date,
+        status = todo.status
+      )
+      db_todos.append(todo_model)
+      
+    db_todo_list_model = models.TodoList(
         name = dto_todo_list.name,
         creation_date = dto_todo_list.creation_date,
-        todos = dto_todo_list.todos
+        todos = db_todos        
     )    
-    db_model.save()
-    
-    return json.dumps(dto_todo_list.__dict__)
+    db_todo_list_model.save()
+
+    json_response = dtos.TodoList.to_json(dto_todo_list)
+    return json_response
   
   
 @app.route('/getAllTodoLists', methods = ['GET'])
 def getTodoLists():
-    db_model = []
-    for todoList in models.TodoList.objects.all():
-      modelDto = dtos.listModelToDto(todoList)
-      db_model.append(json.dumps(modelDto.__dict__))
+    results = []
+    for todo_list_model in models.TodoList.objects.all():
+      todoListDto = dtos.listModelToDto(todo_list_model)
+      results.append(dtos.TodoList.to_json(todoListDto))
       
-    return db_model
+    return results
   
 # ?not working route with params
 # @app.route('/getTodoList/<uuid>', methods = ['POST','GET'])
 @app.route('/getTodoList', methods = ['GET'])
 def getTodoList():
     json_request = json.loads(request.data)
-    id = json_request['id']
-    objInstance = ObjectId(id)   
-    todoListDto: dtos.TodoList    
-    for todoList in models.TodoList.objects.raw({'_id': objInstance}):
-      todoListDto = dtos.listModelToDto(todoList)
+    todo_list_id = json_request['id']
+    objInstance = ObjectId(todo_list_id)   
+    dto_todo_list: dtos.TodoList    
+    for todo_list in models.TodoList.objects.raw({'_id': objInstance}):
+      dto_todo_list = dtos.listModelToDto(todo_list)
       
-    return json.dumps(todoListDto.__dict__)
+    json_response = dtos.TodoList.to_json(dto_todo_list)
+    return json_response
   
 @app.route('/updateTodoList', methods = ['PUT'])
 def updateTodoList():
@@ -57,8 +68,8 @@ def updateTodoList():
       }}
     )
     
-    todoListDto: dtos.TodoList    
+    dto_todo_list: dtos.TodoList    
     for todoList in models.TodoList.objects.raw({'_id': objInstance}):
-      todoListDto = dtos.listModelToDto(todoList)
+      dto_todo_list = dtos.listModelToDto(todoList)
     
-    return json.dumps(todoListDto.__dict__)
+    return json.dumps(dto_todo_list.__dict__)
