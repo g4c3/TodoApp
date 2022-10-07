@@ -19,6 +19,7 @@ class TodoList(object):
         for todo in todos:
             self.todos.append(Todo(**todo))
 
+    # !read about the serialization configs and options in python
     def to_json(self):
         todos = []
         if(self.todos):

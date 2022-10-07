@@ -1,5 +1,6 @@
 from pymodm import MongoModel, EmbeddedMongoModel, fields, connection
 from pymongo.write_concern import WriteConcern
+from bson import ObjectId
 
 connection.connect("mongodb://localhost:27017/db_todo", alias="todo_app_connection")
 
@@ -18,3 +19,13 @@ class TodoList(MongoModel):
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'todo_app_connection'
+        
+    def addTodoToList(self, listId, new_todo_model):
+        listInstance = ObjectId(str(listId).removeprefix('listId='))            
+        todoListModel: TodoList
+        
+        for todoList in TodoList.objects.raw({'_id': listInstance}):
+            todoListModel = todoList     
+        todoListModel.todos.append(new_todo_model)
+        self.todos.__set__(todoListModel.todos)
+        

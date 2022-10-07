@@ -40,8 +40,6 @@ def getTodoLists():
       
     return results
   
-# ?not working route with params
-# @app.route('/getTodoList/<uuid>', methods = ['POST','GET'])
 @app.route('/getTodoList', methods = ['GET'])
 def getTodoList():
     json_request = json.loads(request.data)
@@ -54,13 +52,13 @@ def getTodoList():
     json_response = dtos.TodoList.to_json(dto_todo_list)
     return json_response
   
-@app.route('/updateTodoList', methods = ['PUT'])
-def updateTodoList():
+@app.route('/updateTodoList/<listId>/', methods = ['PUT'])
+def updateTodoList(listId):
     json_request = json.loads(request.data)
-    objInstance = ObjectId(json_request['_id'])
+    listInstance = ObjectId(str(listId).removeprefix('listId='))
     
     models.TodoList.objects.raw({
-      "_id" : objInstance
+      "_id" : listInstance
     }).update(
       {'$set': {
         "name": json_request['name'],
@@ -69,7 +67,36 @@ def updateTodoList():
     )
     
     dto_todo_list: dtos.TodoList    
-    for todoList in models.TodoList.objects.raw({'_id': objInstance}):
-      dto_todo_list = dtos.listModelToDto(todoList)
+    for todoList in models.TodoList.objects.raw({'_id': listInstance}):
+      dto_todo_list = dtos.listModelToDto(todoList)      
+
+    json_response = dtos.TodoList.to_json(dto_todo_list)
+    return json_response
+  
+@app.route('/createTodo/<listId>/', methods = ['POST'])
+def createTodo(listId):
+  json_request = json.loads(request.data)
+  dto_todo = dtos.Todo(**json_request)
+  # maybe some cast or mapping would be better
+  listInstance = ObjectId(str(listId).removeprefix('listId='))  
+  
+  new_todo_model =  models.Todo(
+    text = dto_todo.text,
+    due_date = dto_todo.due_date,
+    status = dto_todo.status
+  )
     
-    return json.dumps(dto_todo_list.__dict__)
+  todo_list_model: models.TodoList
+  for todo_list in models.TodoList.objects.raw({'_id': listInstance}):
+    todo_list_model = todo_list
+    
+  todo_list_model.todos.append(new_todo_model)
+  todo_list_model.save()
+
+  dto_todo_list = dtos.listModelToDto(todo_list_model)
+  json_response = dtos.TodoList.to_json(dto_todo_list)
+  
+  return json_response
+
+
+app.run(debug=True, port=5000)
