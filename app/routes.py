@@ -1,4 +1,4 @@
-from app import app, dtos, models
+from app import app, dtos, models, models_ref
 from flask import request, json
 from bson import ObjectId
 
@@ -11,21 +11,23 @@ def createTodoList():
     json_request = json.loads(request.data)
     dto_todo_list = dtos.TodoList(**json_request)
     
-    db_todos = []
-    for todo in dto_todo_list.todos:
-      todo_model = models.Todo(
-        text = todo.text,
-        due_date = todo.due_date,
-        status = todo.status
-      )
-      db_todos.append(todo_model)
-      
-    db_todo_list_model = models.TodoList(
-        name = dto_todo_list.name,
-        creation_date = dto_todo_list.creation_date,
-        todos = db_todos        
-    )    
-    db_todo_list_model.save()
+    todo_engine_models: list[models_ref.Todo] = []
+    if(len(dto_todo_list.todos) > 0):
+      for todo in dto_todo_list.todos:
+        todo_engine_model = models_ref.Todo(
+          text = todo.text,
+          due_date = todo.due_date,
+          status = todo.status
+        )
+        todo_engine_models.append(todo_engine_model)
+    
+    todo_list_engine_model = models_ref.TodoList(
+      name = dto_todo_list.name,
+      creation_date = dto_todo_list.creation_date,
+      todos = todo_engine_models
+    )
+    
+    todo_list_engine_model.save()
 
     json_response = dtos.TodoList.to_json(dto_todo_list)
     return json_response
@@ -33,23 +35,22 @@ def createTodoList():
   
 @app.route('/getAllTodoLists', methods = ['GET'])
 def getTodoLists():
-    results = []
-    for todo_list_model in models.TodoList.objects.all():
-      todoListDto = dtos.listModelToDto(todo_list_model)
-      results.append(dtos.TodoList.to_json(todoListDto))
+    json_arr_response = []
+    for todo_list_model in models_ref.TodoList.objects.all():
+      todo_list_dto = dtos.listModelToDto(todo_list_model)
+      json_arr_response.append(dtos.TodoList.to_json(todo_list_dto))
       
-    return results
+    return json_arr_response
   
-@app.route('/getTodoList', methods = ['GET'])
-def getTodoList():
-    json_request = json.loads(request.data)
-    todo_list_id = json_request['id']
-    objInstance = ObjectId(todo_list_id)   
+@app.route('/getTodoList/<listId>/', methods = ['GET'])
+def getTodoList(listId):
+    listInstance = ObjectId(str(listId).removeprefix('listId='))  
     dto_todo_list: dtos.TodoList    
-    for todo_list in models.TodoList.objects.raw({'_id': objInstance}):
-      dto_todo_list = dtos.listModelToDto(todo_list)
-      
+    
+    for todo_list_model in models_ref.TodoList.objects(pk=listInstance):
+      dto_todo_list = dtos.listModelToDto(todo_list_model)      
     json_response = dtos.TodoList.to_json(dto_todo_list)
+    
     return json_response
   
 @app.route('/updateTodoList/<listId>/', methods = ['PUT'])
@@ -97,6 +98,3 @@ def createTodo(listId):
   json_response = dtos.TodoList.to_json(dto_todo_list)
   
   return json_response
-
-
-app.run(debug=True, port=5000)

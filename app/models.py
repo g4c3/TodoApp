@@ -15,7 +15,7 @@ class Todo(EmbeddedMongoModel):
 class TodoList(MongoModel):
     name = fields.CharField(required=True)
     creation_date = fields.DateTimeField(required=True)
-    todos = fields.ListField(fields.EmbeddedDocumentField(Todo, default = list, blank=True))
+    todos = fields.EmbeddedDocumentListField(Todo, default = list, blank=True)
     class Meta:
         write_concern = WriteConcern(j=True)
         connection_alias = 'todo_app_connection'

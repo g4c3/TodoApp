@@ -1,5 +1,5 @@
 import datetime, json
-from app import models
+from app import models, models_ref
 
 class Todo(object):
     def __init__(self, text, due_date, status):
@@ -29,7 +29,7 @@ class TodoList(object):
                
         return json.dumps(self.__dict__, indent=4, sort_keys=True, default=str)
     
-def listModelToDto(dbm = models.TodoList):
+def listModelToDto(dbm = models_ref.TodoList):
     todos: list[Todo] = []
     dto_todoList = TodoList(name = dbm.name, creation_date = dbm.creation_date, todos = todos)
     
