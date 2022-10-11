@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{    \r\n    \"name\": \"new list\",\r\n    \"creation_date\": \"\",\r\n    \"todos\": []\r\n}"
+					"raw": "{    \r\n    \"name\": \"a fake sift\",\r\n    \"creation_date\": \"\",\r\n    \"todos\": [\r\n        {\r\n            \"due_date\": \"\",\r\n            \"text\":\"do the bug fixes\",\r\n            \"status\": false\r\n        }        \r\n    ]\r\n}"
 				},
 				"url": {
 					"raw": "http://127.0.0.1:5000/createTodoList",
@@ -45,10 +45,10 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"_id\" : \"633d2f84a5008b6be89808ac\",  \r\n  \"name\": \"new list12\",\r\n  \"todos\": []\r\n}"
+					"raw": "{\r\n    \"name\": \"new list12sadsdsadasdaddssddas\",\r\n    \"todos\": [\r\n        {\r\n            \"id\": \"b77e830f-ed06-4075-9f2c-fd0e3c713533\"\r\n            \"due_date\": \"2022-10-10T19:36:59.311+00:00\",\r\n            \"text\":\"take the dog outasassa\",\r\n            \"status\": false \r\n        }\r\n    ]\r\n}"
 				},
 				"url": {
-					"raw": "http://127.0.0.1:5000/updateTodoList",
+					"raw": "http://127.0.0.1:5000/updateTodoList/listId=63453dc864405818bfdf87d3",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -58,24 +58,18 @@
 					],
 					"port": "5000",
 					"path": [
-						"updateTodoList"
+						"updateTodoList",
+						"listId=63453dc864405818bfdf87d3"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "http://127.0.0.1:5000/getTodoList",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
+			"name": "http://127.0.0.1:5000/getAllTodoList",
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "http://127.0.0.1:5000/getAllTodoLists",
 					"protocol": "http",
@@ -102,18 +96,11 @@
 		},
 		{
 			"name": "http://127.0.0.1:5000/getTodoList",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"id\": \"633d2f84a5008b6be89808ac\"\r\n}"
-				},
 				"url": {
-					"raw": "http://127.0.0.1:5000/getTodoList",
+					"raw": "http://127.0.0.1:5000/getTodoList/listId=63453dc864405818bfdf87d3",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -123,14 +110,105 @@
 					],
 					"port": "5000",
 					"path": [
-						"getTodoList"
+						"getTodoList",
+						"listId=63453dc864405818bfdf87d3"
 					],
 					"query": [
 						{
-							"key": "id",
+							"key": "uuid",
 							"value": "633d2f84a5008b6be89808ac",
 							"disabled": true
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/createTodo",
+			"protocolProfileBehavior": {
+				"strictSSL": false,
+				"disableUrlEncoding": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"due_date\": \"\",\r\n    \"text\":\"take the dog out\",\r\n    \"status\": false \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/createTodo/listId=6344696336305d497b915c87",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"createTodo",
+						"listId=6344696336305d497b915c87"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/updateTodo/listId=63453dc864405818bfdf87d3",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"b77e830f-ed06-4075-9f2c-fd0e3c713533\",\r\n    \"due_date\": \"2022-10-10T19:36:59.311+00:00\",\r\n    \"text\":\"do the bug fixes and take the dog out\",\r\n    \"status\": true \r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/updateTodo/listId=63453dc864405818bfdf87d3",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"updateTodo",
+						"listId=63453dc864405818bfdf87d3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/deleteTodo/listId=6344696336305d497b915c87",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"_id\": \"d2434217-37cd-49b4-b6c9-a671456f47af\"\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/deleteTodo/listId=6344696336305d497b915c87",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"deleteTodo",
+						"listId=6344696336305d497b915c87"
 					]
 				}
 			},

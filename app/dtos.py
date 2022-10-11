@@ -1,12 +1,14 @@
 import datetime, json
-from app import models, models_ref
+from app import models
+import uuid
 
 class Todo(object):
-    def __init__(self, text, due_date, status):
+    def __init__(self, text, due_date, status, id = uuid.uuid4()):
+        self.id: uuid.uuid4() = id 
         self.text: str = text
         self.due_date: datetime = datetime.datetime.now(datetime.timezone.utc) if (due_date == None or due_date == '' or due_date == datetime.MINYEAR) else due_date
         self.status: bool = status
-        
+
 def todoModelToDto(dbm = models.Todo):
     return Todo(text = dbm.text, due_date = dbm.due_date, status = dbm.status)
     
@@ -15,9 +17,11 @@ class TodoList(object):
         self.name: str = name
         self.creation_date: datetime = datetime.datetime.now(datetime.timezone.utc) if (creation_date == None or creation_date == '' or creation_date == datetime.MINYEAR) else creation_date
         self.todos: list[Todo] = []
-        
         for todo in todos:
-            self.todos.append(Todo(**todo))
+            if(isinstance(todo, models.Todo)):
+                self.todos.append(Todo(id = todo.id, text = todo.text, due_date = todo.due_date, status = todo.status))
+            else:
+                self.todos.append(Todo(**todo))           
 
     # !read about the serialization configs and options in python
     def to_json(self):
@@ -29,13 +33,15 @@ class TodoList(object):
                
         return json.dumps(self.__dict__, indent=4, sort_keys=True, default=str)
     
-def listModelToDto(dbm = models_ref.TodoList):
+def listModelToDto(dbm = models.TodoList):
+    dto_todoList = TodoList(name = dbm.name, creation_date = dbm.creation_date, todos = dbm.todos)
     todos: list[Todo] = []
-    dto_todoList = TodoList(name = dbm.name, creation_date = dbm.creation_date, todos = todos)
     
     for db_todo in dbm.todos:
         todo = todoModelToDto(db_todo)
         todos.append(todo)
     
-    dto_todoList.todos = todos;    
+    dto_todoList.todos = todos
+    
     return dto_todoList
+

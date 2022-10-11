@@ -1,31 +1,16 @@
-from pymodm import MongoModel, EmbeddedMongoModel, fields, connection
-from pymongo.write_concern import WriteConcern
-from bson import ObjectId
+from mongoengine import *
+import datetime
+import uuid
 
-connection.connect("mongodb://localhost:27017/db_todo", alias="todo_app_connection")
+connect(host="mongodb://localhost:27017/db_todo",  w=1, j=True)
 
-class Todo(EmbeddedMongoModel):
-    text = fields.CharField(required=True)
-    due_date = fields.DateTimeField(required=True)
-    status = fields.BooleanField(required=True, default=False)
-    class Meta:
-        write_concern = WriteConcern(j=True)
-        connection_alias = 'todo_app_connection'
-    
-class TodoList(MongoModel):
-    name = fields.CharField(required=True)
-    creation_date = fields.DateTimeField(required=True)
-    todos = fields.EmbeddedDocumentListField(Todo, default = list, blank=True)
-    class Meta:
-        write_concern = WriteConcern(j=True)
-        connection_alias = 'todo_app_connection'
-        
-    def addTodoToList(self, listId, new_todo_model):
-        listInstance = ObjectId(str(listId).removeprefix('listId='))            
-        todoListModel: TodoList
-        
-        for todoList in TodoList.objects.raw({'_id': listInstance}):
-            todoListModel = todoList     
-        todoListModel.todos.append(new_todo_model)
-        self.todos.__set__(todoListModel.todos)
-        
+class Todo(EmbeddedDocument):
+    id = UUIDField(required=False, default=uuid.uuid4(), binary=False)
+    text = StringField(required=True, max_length=200)
+    due_date = DateTimeField(default=datetime.datetime.utcnow)
+    status = BooleanField(default=False)
+
+class TodoList(Document):
+    name = StringField(required=True, max_length=32)
+    creation_date = DateTimeField(default=datetime.datetime.utcnow)
+    todos = EmbeddedDocumentListField(Todo, default=[])
