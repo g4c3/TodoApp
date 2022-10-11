@@ -8,9 +8,6 @@ class Todo(object):
         self.text: str = text
         self.due_date: datetime = datetime.datetime.now(datetime.timezone.utc) if (due_date == None or due_date == '' or due_date == datetime.MINYEAR) else due_date
         self.status: bool = status
-
-def todoModelToDto(dbm = models.Todo):
-    return Todo(text = dbm.text, due_date = dbm.due_date, status = dbm.status)
     
 class TodoList(object):
     def __init__(self, name, creation_date, todos: list[Todo]):
@@ -21,27 +18,4 @@ class TodoList(object):
             if(isinstance(todo, models.Todo)):
                 self.todos.append(Todo(id = todo.id, text = todo.text, due_date = todo.due_date, status = todo.status))
             else:
-                self.todos.append(Todo(**todo))           
-
-    # !read about the serialization configs and options in python
-    def to_json(self):
-        todos = []
-        if(self.todos):
-            for todo in self.todos:
-                todos.append(json.dumps(todo.__dict__, indent=4, sort_keys=True, default=str))
-        self.todos = todos
-               
-        return json.dumps(self.__dict__, indent=4, sort_keys=True, default=str)
-    
-def listModelToDto(dbm = models.TodoList):
-    dto_todoList = TodoList(name = dbm.name, creation_date = dbm.creation_date, todos = dbm.todos)
-    todos: list[Todo] = []
-    
-    for db_todo in dbm.todos:
-        todo = todoModelToDto(db_todo)
-        todos.append(todo)
-    
-    dto_todoList.todos = todos
-    
-    return dto_todoList
-
+                self.todos.append(Todo(**todo))
