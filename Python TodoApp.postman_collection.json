@@ -12,7 +12,12 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{    \r\n    \"name\": \"a fake sift\",\r\n    \"creation_date\": \"\",\r\n    \"todos\": [\r\n        {\r\n            \"due_date\": \"\",\r\n            \"text\":\"do the bug fixes\",\r\n            \"status\": false\r\n        }        \r\n    ]\r\n}"
+					"raw": "{\r\n    \"name\": \"a fake stuff\",\r\n    \"todos\": [\r\n        {\r\n            \"text\":\"do the bug fixes\",\r\n            \"status\": false\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
 				},
 				"url": {
 					"raw": "http://127.0.0.1:5000/createTodoList",
@@ -45,10 +50,15 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"new list12sadsdsadasdaddssddas\",\r\n    \"todos\": [\r\n        {\r\n            \"id\": \"b77e830f-ed06-4075-9f2c-fd0e3c713533\"\r\n            \"due_date\": \"2022-10-10T19:36:59.311+00:00\",\r\n            \"text\":\"take the dog outasassa\",\r\n            \"status\": false \r\n        }\r\n    ]\r\n}"
+					"raw": "{\r\n    \"name\": \"new todo list\",\r\n    \"creation_date\": \"2022-10-11T09:56:24.265+00:00\",\r\n    \"todos\": [\r\n        {\r\n            \"id\": \"63467ad3cb03d78bc90c9860\",\r\n            \"due_date\": \"b5a9392c-a619-4f7f-bada-6b6dca854b0d\",\r\n            \"text\":\"repair the car\",\r\n            \"status\": false\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:5000/updateTodoList/listId=63453dc864405818bfdf87d3",
+					"raw": "http://127.0.0.1:5000/updateTodoList/listId=634681cb5841e0d37415f97c",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -59,7 +69,7 @@
 					"port": "5000",
 					"path": [
 						"updateTodoList",
-						"listId=63453dc864405818bfdf87d3"
+						"listId=634681cb5841e0d37415f97c"
 					]
 				}
 			},
@@ -100,7 +110,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:5000/getTodoList/listId=63453dc864405818bfdf87d3",
+					"raw": "http://127.0.0.1:5000/getTodoList/listId=634681cb5841e0d37415f97c",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -111,7 +121,7 @@
 					"port": "5000",
 					"path": [
 						"getTodoList",
-						"listId=63453dc864405818bfdf87d3"
+						"listId=634681cb5841e0d37415f97c"
 					],
 					"query": [
 						{
@@ -135,7 +145,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"due_date\": \"\",\r\n    \"text\":\"take the dog out\",\r\n    \"status\": false \r\n}",
+					"raw": "{\r\n    \"due_date\": \"2022-10-11T09:56:24.265+00:00\",\r\n    \"text\":\"go shoppping\",\r\n    \"status\": false \r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -143,7 +153,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:5000/createTodo/listId=6344696336305d497b915c87",
+					"raw": "http://127.0.0.1:5000/createTodo/listId=634681cb5841e0d37415f97c",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -154,7 +164,7 @@
 					"port": "5000",
 					"path": [
 						"createTodo",
-						"listId=6344696336305d497b915c87"
+						"listId=634681cb5841e0d37415f97c"
 					]
 				}
 			},
@@ -167,10 +177,10 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": \"b77e830f-ed06-4075-9f2c-fd0e3c713533\",\r\n    \"due_date\": \"2022-10-10T19:36:59.311+00:00\",\r\n    \"text\":\"do the bug fixes and take the dog out\",\r\n    \"status\": true \r\n}"
+					"raw": "{\r\n    \"id\": \"dba098c1-74d0-4ae9-8518-30c95ebe9629\",\r\n    \"due_date\": \"2022-10-10T19:36:59.311+00:00\",\r\n    \"text\":\"clean up\",\r\n    \"status\": false \r\n}"
 				},
 				"url": {
-					"raw": "http://127.0.0.1:5000/updateTodo/listId=63453dc864405818bfdf87d3",
+					"raw": "http://127.0.0.1:5000/updateTodo/listId=634681cb5841e0d37415f97c",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -181,7 +191,7 @@
 					"port": "5000",
 					"path": [
 						"updateTodo",
-						"listId=63453dc864405818bfdf87d3"
+						"listId=634681cb5841e0d37415f97c"
 					]
 				}
 			},
@@ -194,10 +204,10 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"_id\": \"d2434217-37cd-49b4-b6c9-a671456f47af\"\r\n}"
+					"raw": "{\r\n    \"id\": \"dba098c1-74d0-4ae9-8518-30c95ebe9629\"\r\n}"
 				},
 				"url": {
-					"raw": "http://127.0.0.1:5000/deleteTodo/listId=6344696336305d497b915c87",
+					"raw": "http://127.0.0.1:5000/deleteTodo/listId=634681cb5841e0d37415f97c",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -208,7 +218,7 @@
 					"port": "5000",
 					"path": [
 						"deleteTodo",
-						"listId=6344696336305d497b915c87"
+						"listId=634681cb5841e0d37415f97c"
 					]
 				}
 			},
