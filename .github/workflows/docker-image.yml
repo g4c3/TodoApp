@@ -17,9 +17,6 @@ jobs:
     - name: Setup env
       run: |
             mkdir ${{ env.BUILD_ARTIFACTS_PATH }}
-            ls .
-            ls \
-            ls ${{ env.BUILD_ARTIFACTS_PATH }}
             
     - uses: actions/checkout@v3
     - name: Build the Docker image
