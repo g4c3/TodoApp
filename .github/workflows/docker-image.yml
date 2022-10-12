@@ -13,13 +13,17 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BUILD_ARTIFACTS_PATH: artifacts
+      CHECKOUT_PATH: checkout
+      
     steps:
     - name: Setup env
-      run: mkdir ${{ env.BUILD_ARTIFACTS_PATH }}
-            
+      run: |
+        mkdir ${{ env.BUILD_ARTIFACTS_PATH }}
+        mkdir ${{ env.CHECKOUT_PATH }}
+        
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag todo_app:$(date +%s)
+      run: docker build . --file Dockerfile --tag todo_app:initial
       
     - name: Login to Docker, Build and Push container to registry
       run: |
