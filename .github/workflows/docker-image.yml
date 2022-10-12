@@ -30,5 +30,4 @@ jobs:
       run: |
         cd ${{ env.BUILD_ARTIFACTS_PATH }}
         docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
-        docker build --file=Dockerfile -t lilov88/python.todo.app:initial . && docker push lilov88/python.todo.app
-        docker push $lilov88/python.todo.app:initial  
+        docker build --file=Dockerfile -t lilov88/python.todo.app . && docker push lilov88/python.todo.app
