@@ -3,7 +3,7 @@ from mongoengine import *
 from datetime import *
 import uuid
 
-connect(host="mongodb://localhost:27017/db_todo",  w=1) # , j=True
+connect(host="mongodb://172.17.0.2:27017/db_todo",  w=1) # , j=True
 
 class Todo(EmbeddedDocument):    
     id = UUIDField(required=False, default=uuid.uuid4(), binary=False)
@@ -31,21 +31,5 @@ class TodoList(Document):
     def __init__(self, *args, **kwargs):
         super(TodoList, self).__init__(*args, **kwargs)
         self.name: StringField(required=True, max_length=32) = kwargs['name']
-        self.creation_date: DateTimeField(default=datetime.utcnow) # = kwargs['creation_date'] if 'creation_date' in kwargs else datetime.utcnow()
-        self.todos: EmbeddedDocumentListField(Todo, default=[]) # = self.set_todos(**kwargs)
-        
-    def set_creation_date(self, **kwargs):
-        if 'creation_date' in kwargs:
-            if not (kwargs['creation_date'] == None or kwargs['creation_date'] == '' or kwargs['creation_date'] == datetime.MINYEAR):
-                return kwargs['creation_date']
-            else:  
-                return datetime.utcnow()
-        else:  
-            return datetime.utcnow()
-        
-    def set_todos(self, **kwargs):
-        if 'todos' in kwargs:
-            for todo in kwargs['todos']:
-                self.todos.append(Todo(**todo))            
-        else:
-            self.todos
+        self.creation_date: DateTimeField(default=datetime.utcnow)
+        self.todos: EmbeddedDocumentListField(Todo, default=[])

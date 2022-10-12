@@ -1,19 +1,29 @@
 MongoDB: 
-    docker run --name local-mongo -d mongo:latest 
+    docker run --name local-mongo -d mongo:latest
     
 commands:
-    pip3 install -U virtualenv
-    virtualenv venv
-    linux:
-        source venv/bin/activate
-    windows:
-        venv\Scripts\activate 
+    setupVenv.ps1
 
 run:
-    pip install flask
-    pip install pymongo 
-    pip install pymodm
-    pip install python-bsonjs
+    # this step is not required if setupVenv.ps1 was runned already
+    pip install requirements.txt
 
     flask run    
 
+
+for use the application in docker:
+    MongoDB Setup: 
+        docker run --name local-mongo -p 27017:27017 mongo:latest
+        docker ps
+        # copy the mongo container id
+        docker inspect $docker_container_id
+        # find section NetworkSettings => Networks => bridge => IPAddress
+        # copy the value of IPAddress
+        # paste it in connection from models.py
+        # if the port is not 27017, change it also
+
+    TodoApp Setup:
+        # open powershell
+        # cd to the app main directory
+        docker build --tag todo_app .
+        docker run --publish 8000:5000 --name=todo_app todo_app
