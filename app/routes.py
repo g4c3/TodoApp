@@ -1,75 +1,83 @@
-from app import app, models
+from app import app
 from app.decorators import *
+from app.models import *
 from flask import request, json
 import uuid
 
 
 @app.route('/')
 def index():
-    return '<h1>Todo API</h1>'
+    response = '<h1>Todo API! Your IP Address {ip}</h1>'.format(ip = request.remote_addr)
+    return response
 
 
 @app.route('/createTodoList', methods=['POST'])
+@track_time_spent
 def createTodoList():
     json_request = json.loads(request.data)
-    todo_list_model = models.TodoList(**json_request)
+    todo_list_model = TodoList(**json_request)
     todo_list_model.save()
     return todo_list_model.to_json()
 
 
 @app.route('/getAllTodoLists', methods=['GET'])
+@track_time_spent
 def getTodoLists():
-    return models.TodoList.objects.all().to_json()
+    return TodoList.objects.all().to_json()
 
 
 @app.route('/getTodoList/<string:listId>/', methods=['GET'])
+@track_time_spent
 @remove_prefix
 def getTodoList(listId):
-    return models.TodoList.objects(pk=listId).to_json()
+    return TodoList.objects(pk=listId).to_json()
 
 
 @app.route('/updateTodoList/<listId>/', methods=['PUT'])
+@track_time_spent
 @remove_prefix
 def updateTodoList(listId):
-
     json_request = json.loads(request.data)
 
-    models.TodoList.objects(pk=listId).update_one(
+    TodoList.objects(pk=listId).update_one(
         set__name=json_request['name'])
 
-    return models.TodoList.objects(pk=listId).to_json()
+    return TodoList.objects(pk=listId).to_json()
 
 
 @app.route('/createTodo/<listId>/', methods=['POST'])
+@track_time_spent
 @remove_prefix
 def createTodo(listId):
     json_request = json.loads(request.data)
-    dto_todo = models.Todo(**json_request)
+    dto_todo = Todo(**json_request)
 
-    models.TodoList.objects(pk=listId).update_one(push__todos=dto_todo)
+    TodoList.objects(pk=listId).update_one(push__todos=dto_todo)
 
-    return models.TodoList.objects(pk=listId).to_json()
+    return TodoList.objects(pk=listId).to_json()
 
 
 @app.route('/deleteTodo/<listId>', methods=['DELETE'])
+@track_time_spent
 @remove_prefix
 def deleteTodo(listId):
     json_request = json.loads(request.data)
     todo_uuid = uuid.UUID(json_request['id'])
 
-    models.TodoList.objects(pk=listId).update_one(
+    TodoList.objects(pk=listId).update_one(
         pull__todos__id=todo_uuid)
 
-    return models.TodoList.objects(pk=listId).to_json()
+    return TodoList.objects(pk=listId).to_json()
 
 
 @app.route('/updateTodo/<listId>', methods=['PUT'])
+@track_time_spent
 @remove_prefix
 def updateTodo(listId):
     json_request = json.loads(request.data)
 
-    dto_todo = models.Todo(**json_request)
-    models.TodoList.objects(todos__id=uuid.UUID(
+    dto_todo = Todo(**json_request)
+    TodoList.objects(todos__id=uuid.UUID(
         dto_todo.id)).update_one(set__todos__S=dto_todo)
 
-    return models.TodoList.objects(pk=listId).to_json()
+    return TodoList.objects(pk=listId).to_json()
