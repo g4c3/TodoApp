@@ -1,0 +1,36 @@
+definitions:
+  Todo:
+    type: object
+    properties:
+      id: 
+        type: string
+      text: 
+        type: string
+      due_date:
+        type: object
+      status:
+        type: boolean
+        
+  TodoList:
+    type: object
+    properties:
+      _id: 
+        type: string
+      name: 
+        type: string
+      creation_date:
+        type: object
+      todos:
+        type: array
+        items:
+          $ref: '#/definitions/Todo'
+
+summary: "Get TodoList"
+description: "This is a simple API to get all todo lists."
+produces:
+- "application/json"
+responses:
+  200:
+    description: "Success"
+    schema:
+      $ref: '#/definitions/TodoList'
