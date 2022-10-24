@@ -12,17 +12,10 @@ class Todo(EmbeddedDocument):
     status = BooleanField(default=False)
     def __init__(self, *args, **kwargs):
         super(Todo, self).__init__(*args, **kwargs)
-        self.id: UUIDField(required=False, default=uuid.uuid4(), binary=False) = self.set_id(**kwargs)
-        self.text: StringField(required=True, max_length=200) = kwargs['text']
-        self.due_date: DateTimeField(default=datetime.utcnow) = kwargs['due_date'] if 'due_date' in kwargs else datetime.utcnow()
-        self.status: BooleanField(default=False) = kwargs['status']
-        
-    def set_id(self, **kwargs):
-        if 'id' in kwargs:
-            return kwargs['id']
-        # elif self.id:
-        #     return self.id
-            
+        self.id = kwargs['id'] if 'id' in kwargs else self.id
+        self.text = kwargs['text']
+        self.due_date = kwargs['due_date'] if 'due_date' in kwargs else datetime.utcnow()
+        self.status = kwargs['status']           
         
 class TodoList(Document):
     name = StringField(required=True, max_length=32)
@@ -30,6 +23,6 @@ class TodoList(Document):
     todos = EmbeddedDocumentListField(Todo, default=[])
     def __init__(self, *args, **kwargs):
         super(TodoList, self).__init__(*args, **kwargs)
-        self.name: StringField(required=True, max_length=32) = kwargs['name']
-        self.creation_date: DateTimeField(default=datetime.utcnow)
-        self.todos: EmbeddedDocumentListField(Todo, default=[])
+        self.name = kwargs['name']
+        self.creation_date
+        self.todos

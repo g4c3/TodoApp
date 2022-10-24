@@ -25,7 +25,7 @@ definitions:
         items:
           $ref: '#/definitions/Todo'
 
-summary: "Get TodoList"
+summary: "Get all Todo Lists"
 description: "This is a simple API to get all todo lists."
 produces:
 - "application/json"

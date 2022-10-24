@@ -27,3 +27,7 @@ for use the application in docker:
         # cd to the app main directory
         docker build --tag todo_app .
         docker run --publish 8000:5000 --name=todo_app todo_app
+
+
+autopep8
+flasgger
