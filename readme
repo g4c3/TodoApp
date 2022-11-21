@@ -28,5 +28,3 @@ for use the application in docker:
         docker build --tag todo_app .
         docker run --publish 8000:5000 --name=todo_app todo_app
 
-
-Symlink Test
